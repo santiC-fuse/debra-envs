@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import AWS from "aws-sdk";
-dotenv.config({ path: "../.env" });
+dotenv.config("../.env");
 
 const envNameToFileName = (env) => {
   if (!env)
@@ -18,8 +18,8 @@ const checkEnvVariableExistAndUse = (variableName, defaultValue) => {
 
 const s3download = async (params) => {
   const s3 = new AWS.S3({
-    accessKeyId: checkEnvVariableExistAndUse('AWS_ACCESS_KEY_ID'),
-    secretAccessKey: checkEnvVariableExistAndUse('AWS_SECRET_ACCESS_KEY'),
+    accessKeyId: checkEnvVariableExistAndUse("AWS_ACCESS_KEY_ID"),
+    secretAccessKey: checkEnvVariableExistAndUse("AWS_SECRET_ACCESS_KEY"),
   });
   const data = await s3.getObject(params).promise();
 
@@ -30,7 +30,7 @@ const getEnvVars = async (env) => {
   if (!env) throw new Error("Environment parameter needed");
   const file = envNameToFileName(env);
   const params = {
-    Bucket: checkEnvVariableExistAndUse('AWS_BUCKET_NAME'),
+    Bucket: checkEnvVariableExistAndUse("AWS_BUCKET_NAME"),
     Key: file,
   };
   try {
