@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import AWS from "aws-sdk";
-dotenv.config("../.env");
+dotenv.config({ path: "../.env" });
 
 const envNameToFileName = (env) => {
   if (!env)
@@ -26,6 +26,10 @@ const s3download = async (params) => {
   return data.Body.toString("utf-8");
 };
 
+const formatResponse = (response) => {
+  return `\`\`\`\n${response}\n\`\`\``;
+};
+
 const getEnvVars = async (env) => {
   if (!env) throw new Error("Environment parameter needed");
   const file = envNameToFileName(env);
@@ -35,7 +39,8 @@ const getEnvVars = async (env) => {
   };
   try {
     const s3obj = await s3download(params);
-    console.log(s3obj);
+    const response = formatResponse(s3obj);
+    console.log(response);
   } catch (e) {
     console.error(`Env vars for ${env} not found in ${params.Bucket}`);
   }
